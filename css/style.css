@@ -158,3 +158,5 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px
    或 color-scheme 都沒有用;有效的做法是把那一圈裁掉,round 讓裁切也是圓的。
    數值取自 Google 目前的實作,哪天他們改了,白框可能回來,但不影響登入。 */
 #gsi iframe[src*="accounts.google.com"] { clip-path: inset(2px 12px round 999px); }
+/* 再保險一層,不依賴 Google 內部的尺寸:外層固定成 40×40 的圓,超出去的部分(包括那圈白底)都看不到。 */
+#gsi { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex: 0 0 auto; }
