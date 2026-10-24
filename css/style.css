@@ -152,6 +152,9 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px
 /* .btn、button 等寫了 display 的元素,瀏覽器內建的 [hidden] 會被蓋掉,要明確壓回去。 */
 [hidden] { display: none !important; }
 
-/* Google 登入鈕在 iframe 裡,裡面是淺色;外層頁面是深色時瀏覽器會幫 iframe 鋪白底(兩邊的 color-scheme 不同)。
-   讓 iframe 也當成淺色,背景就保持透明。 */
-#gsi iframe { color-scheme: light; }
+/* Google 登入鈕的白色矩形。登入鈕畫在 Google 的 iframe 裡:iframe 64×44、margin -2px -12px,
+   裡面的按鈕只有 40×40,四周那一圈(上下 2px、左右 12px)是 iframe 裡面的文件畫的白底,
+   深色頁面上就變成按鈕外面的白色矩形。跨來源的內容改不到,在 iframe 元素上設 background
+   或 color-scheme 都沒有用;有效的做法是把那一圈裁掉,round 讓裁切也是圓的。
+   數值取自 Google 目前的實作,哪天他們改了,白框可能回來,但不影響登入。 */
+#gsi iframe[src*="accounts.google.com"] { clip-path: inset(2px 12px round 999px); }
