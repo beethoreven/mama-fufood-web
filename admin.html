@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>管理後台 - 媽媽記副食品</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <a href="index.html"><img src="favicon.png" alt="回首頁"></a>
+    <span class="title">管理後台</span>
+    <span id="who" class="muted"></span>
+    <button id="logout" hidden>登出</button>
+  </header>
+  <main>
+    <div id="login" class="card" hidden>
+      <p>請用管理員的 Google 帳號登入。</p>
+      <div id="gsi"></div>
+      <p id="login-msg" class="muted"></p>
+    </div>
+    <div id="app" hidden>
+      <div class="tabs" id="tabs">
+        <button data-tab="data" class="active">公用資料</button>
+        <button data-tab="version">App 版本</button>
+        <button data-tab="feedback">意見回饋</button>
+        <button data-tab="admins">管理員</button>
+        <button data-tab="system">系統</button>
+      </div>
+      <div id="msg"></div>
+      <section id="tab-data"></section>
+      <section id="tab-version" hidden></section>
+      <section id="tab-feedback" hidden></section>
+      <section id="tab-admins" hidden></section>
+      <section id="tab-system" hidden></section>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer onload="window.mffAdminGsiReady && window.mffAdminGsiReady()"
+    onerror="document.getElementById('login-msg').textContent = '無法載入 Google 登入元件,請確認網路或關閉擋廣告的外掛後重新整理。'"></script>
+</body>
+</html>

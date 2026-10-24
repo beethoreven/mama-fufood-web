@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>媽媽記副食品</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <a href="index.html"><img src="favicon.png" alt="回首頁"></a>
+    <span class="title" id="title">媽媽記副食品</span>
+  </header>
+  <main>
+    <article class="card legal" id="content"><p class="muted">載入中…</p></article>
+  </main>
+  <footer>本 App 僅供記錄與參考,非基於醫學知識做的判斷。寶寶有任何反應,請諮詢醫師。</footer>
+  <script src="js/md.js"></script>
+  <script>
+    // 和 App 內建的是同一份內容(tools/sync_texts.py 同步)。
+    (function () {
+      const docs = { terms: "使用者條款", privacy: "隱私權政策", judgement_guide: "判斷邏輯說明" };
+      const doc = new URLSearchParams(location.search).get("doc");
+      const box = document.getElementById("content");
+      if (!docs[doc]) { box.innerHTML = '<p>找不到這份文件。<a href="index.html">回首頁</a></p>'; return; }
+      document.title = docs[doc] + " - 媽媽記副食品";
+      document.getElementById("title").textContent = docs[doc];
+      fetch("legal/" + doc + ".md", { cache: "no-cache" })
+        .then((r) => { if (!r.ok) throw new Error(); return r.text(); })
+        .then((md) => { box.innerHTML = window.renderMarkdown(md); })
+        .catch(() => { box.innerHTML = "<p>載入失敗,請重新整理。</p>"; });
+    })();
+  </script>
+</body>
+</html>
