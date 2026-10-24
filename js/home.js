@@ -14,6 +14,37 @@
     $("play").appendChild(a);
   }
 
+  // 介紹與三份文件用頁籤切換,不換頁。網址帶 ?doc=privacy 這類參數時直接打開那一份,
+  // 切換頁籤時也更新網址,方便複製連結。legal.html 仍保留給 App 與 Google 同意畫面的連結用。
+  const DOCS = { terms: "使用者條款", privacy: "隱私權政策", judgement_guide: "判斷邏輯說明" };
+  const loaded = {};
+  async function showTab(doc) {
+    if (!DOCS[doc]) doc = "";
+    for (const b of $("tabs").querySelectorAll("button")) b.classList.toggle("active", b.dataset.doc === doc);
+    $("intro").hidden = !!doc;
+    $("doc").hidden = !doc;
+    document.title = doc ? DOCS[doc] + " - 媽媽記副食品" : "媽媽記副食品";
+    history.replaceState(null, "", doc ? "?doc=" + doc : location.pathname);
+    if (!doc) return;
+    if (!loaded[doc]) {
+      $("doc").innerHTML = '<p class="muted">載入中…</p>';
+      try {
+        const r = await fetch("legal/" + doc + ".md", { cache: "no-cache" });
+        if (!r.ok) throw new Error();
+        loaded[doc] = window.renderMarkdown(await r.text());
+      } catch (e) {
+        $("doc").innerHTML = "<p>載入失敗，請重新整理。</p>";
+        return;
+      }
+    }
+    $("doc").innerHTML = loaded[doc];
+  }
+  $("tabs").onclick = (ev) => {
+    const b = ev.target.closest("button");
+    if (b) showTab(b.dataset.doc);
+  };
+  showTab(new URLSearchParams(location.search).get("doc") || "");
+
   async function showAdmin() {
     try {
       const me = await api.call("GET", "/api/admin/me", undefined, { timeoutMs: 20000 });

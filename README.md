@@ -21,8 +21,8 @@
 
 | 頁面 | 內容 |
 |---|---|
-| `index.html` | 首頁:App 的介紹、「你的資料只在你手上」的說明、下載(目前尚未上架)、文件連結。右上角可以用 Google 登入:一般使用者登入沒有作用;管理員登入後才出現「管理後台」的入口。 |
-| `legal.html?doc=terms` / `privacy` / `judgement_guide` | 使用者條款、隱私權政策、判斷邏輯說明。隱私權政策的公開網址,將來上架時要填進 Google Play。 |
+| `index.html` | 首頁:App 的介紹、「你的資料只在你手上」的說明、下載(目前尚未上架)。上方的頁籤可以在同一頁切換到使用者條款、隱私權政策、判斷邏輯說明(網址會帶 `?doc=`,可以直接分享)。右上角可以用 Google 登入:一般使用者登入沒有作用;管理員登入後才出現「管理後台」的入口。 |
+| `legal.html?doc=terms` / `privacy` / `judgement_guide` | 使用者條款、隱私權政策、判斷邏輯說明的單獨頁面,內容和首頁頁籤是同一份。App 與 Google 同意畫面連的是這個網址,所以保留;隱私權政策的公開網址,將來上架時要填進 Google Play。 |
 | `admin.html` | 管理後台,五個分頁:公用資料(食材清單與單位的編輯、發布)、App 版本(強制更新門檻與提示文字)、意見回饋、管理員、系統(快取與資料庫的版本、重新載入快取)。 |
 
 ### 系統架構
@@ -165,8 +165,8 @@ Three kinds of pages:
 
 | Page | Contents |
 |---|---|
-| `index.html` | Home: an introduction to the app, a "your data stays in your hands" explanation, downloads (not on Google Play yet) and document links. Google sign-in sits at the top right: signing in does nothing for regular users; only admins get an entry point to the admin console. |
-| `legal.html?doc=terms` / `privacy` / `judgement_guide` | Terms of use, privacy policy, judgement-logic guide. The privacy policy's public URL is what will go into Google Play when the app is listed. |
+| `index.html` | Home: an introduction to the app, a "your data stays in your hands" explanation, downloads (not on Google Play yet). Tabs at the top switch, on the same page, to the terms of use, privacy policy and judgement-logic guide (the URL carries `?doc=`, so it can be shared directly). Google sign-in sits at the top right: signing in does nothing for regular users; only admins get an entry point to the admin console. |
+| `legal.html?doc=terms` / `privacy` / `judgement_guide` | Standalone pages for the terms of use, privacy policy and judgement-logic guide — the same content as the home page tabs. The app and the Google consent screen link to these URLs, so they stay; the privacy policy's public URL is what will go into Google Play when the app is listed. |
 | `admin.html` | Admin console with five tabs: public data (editing and publishing the food list and units), app version (force-update threshold and notice text), feedback, admins, and system (cache and database versions, reloading the cache). |
 
 ### System Architecture

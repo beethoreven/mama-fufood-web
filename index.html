@@ -18,42 +18,44 @@
     <a id="admin-link" class="btn primary" href="admin.html" hidden>管理後台</a>
   </header>
   <main>
-    <div class="card">
-      <div class="row">
-        <img src="icon_256.png" alt="App 圖示" width="96" height="96" style="border-radius: 22px">
-        <div class="grow">
-          <h1 style="margin: 0; font-size: 22px">媽媽記副食品</h1>
-          <p style="margin: 6px 0 0">記錄寶寶的副食品：每次吃了什麼、吃多少、有沒有過敏狀況、寶寶喜不喜歡，
-            並整理成月曆、統計與簡單的判斷結果。</p>
+    <nav class="tabs" id="tabs">
+      <button data-doc="" class="active">介紹</button>
+      <button data-doc="terms">使用者條款</button>
+      <button data-doc="privacy">隱私權政策</button>
+      <button data-doc="judgement_guide">判斷邏輯說明</button>
+    </nav>
+    <article class="card legal" id="doc" hidden></article>
+    <div id="intro">
+      <div class="card">
+        <div class="row">
+          <img src="icon_256.png" alt="App 圖示" width="96" height="96" style="border-radius: 22px">
+          <div class="grow">
+            <h1 style="margin: 0; font-size: 22px">媽媽記副食品</h1>
+            <p style="margin: 6px 0 0">記錄寶寶的副食品：每次吃了什麼、吃多少、有沒有過敏狀況、寶寶喜不喜歡，
+              並整理成月曆、統計與簡單的判斷結果。</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <h2 style="margin-top: 0; font-size: 17px">你的資料只在你手上</h2>
-      <ul>
-        <li>寶寶的名稱、紀錄與照片只存在你的手機，或你自己的 Google 雲端硬碟（開啟雲端功能時）。</li>
-        <li>匯出檔整份加密，只能用匯出時的 Google 帳號匯入；我們拿不到金鑰。</li>
-        <li>沒有廣告，也沒有任何分析工具。</li>
-      </ul>
-      <p class="muted">本 App 僅供記錄與參考，非基於醫學知識做的判斷。寶寶有任何反應，請諮詢醫師。</p>
-    </div>
-    <div class="card">
-      <h2 style="margin-top: 0; font-size: 17px">下載</h2>
-      <p id="play">目前尚未在 Google Play 上架。</p>
-    </div>
-    <div class="card">
-      <h2 style="margin-top: 0; font-size: 17px">文件</h2>
-      <p class="row">
-        <a class="btn" href="legal.html?doc=terms">使用者條款</a>
-        <a class="btn" href="legal.html?doc=privacy">隱私權政策</a>
-        <a class="btn" href="legal.html?doc=judgement_guide">判斷邏輯說明</a>
-      </p>
+      <div class="card">
+        <h2 style="margin-top: 0; font-size: 17px">你的資料只在你手上</h2>
+        <ul>
+          <li>寶寶的名稱、紀錄與照片只存在你的手機，或你自己的 Google 雲端硬碟（開啟雲端功能時）。</li>
+          <li>匯出檔整份加密，只能用匯出時的 Google 帳號匯入；我們拿不到金鑰。</li>
+          <li>沒有廣告，也沒有任何分析工具。</li>
+        </ul>
+        <p class="muted">本 App 僅供記錄與參考，非基於醫學知識做的判斷。寶寶有任何反應，請諮詢醫師。</p>
+      </div>
+      <div class="card">
+        <h2 style="margin-top: 0; font-size: 17px">下載</h2>
+        <p id="play">目前尚未在 Google Play 上架。</p>
+      </div>
     </div>
     <p id="login-note" class="muted"></p>
   </main>
   <footer>阿舍老師（本名 沈思瑜）</footer>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/md.js"></script>
   <script src="js/home.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer onload="window.mffHomeGsiReady && window.mffHomeGsiReady()"
     onerror="document.getElementById('login-note').textContent = '無法載入 Google 登入元件（不影響瀏覽網站）。'"></script>
