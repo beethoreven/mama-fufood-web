@@ -75,7 +75,9 @@
       return;
     }
     google.accounts.id.initialize({ client_id: cfg.googleClientId, callback: onCredential, auto_select: false });
-    google.accounts.id.renderButton($("gsi"), { type: "icon", shape: "circle", theme: "outline", size: "large" });
+    // 深色模式用深色的按鈕;用預設的 outline 會在深色頁面上變成一個白色的圓框。
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    google.accounts.id.renderButton($("gsi"), { type: "icon", shape: "circle", theme: dark ? "filled_black" : "outline", size: "large" });
   };
 
   if (api.token()) showAdmin();

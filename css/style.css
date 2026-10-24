@@ -151,3 +151,7 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px
 
 /* .btn、button 等寫了 display 的元素,瀏覽器內建的 [hidden] 會被蓋掉,要明確壓回去。 */
 [hidden] { display: none !important; }
+
+/* Google 登入鈕在 iframe 裡,裡面是淺色;外層頁面是深色時瀏覽器會幫 iframe 鋪白底(兩邊的 color-scheme 不同)。
+   讓 iframe 也當成淺色,背景就保持透明。 */
+#gsi iframe { color-scheme: light; }
