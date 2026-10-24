@@ -1,7 +1,6 @@
 // 管理後台(SPEC 第 3 節「管理後台功能」)。
 // ★ 前端的鎖是化妝品:每一支後台 API 在後端都要求管理員的 session(auth_utils/access.py)。
 (function () {
-  const cfg = window.MFF_CONFIG;
   const api = window.mffApi;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -40,11 +39,9 @@
   }
 
   // ── 登入 ────────────────────────────────────────────────
+  // 登入只在首頁做(首頁登入後才出現後台入口)。這一頁沒有登入狀態時直接回首頁。
   function showLogin() {
-    $("app").hidden = true;
-    $("logout").hidden = true;
-    $("who").textContent = "";
-    $("login").hidden = false;
+    location.replace("index.html");
   }
 
   async function start() {
@@ -52,34 +49,17 @@
     try {
       const me = await api.call("GET", "/api/admin/me");
       $("who").textContent = me.email;
-      $("login").hidden = true;
+      $("status").hidden = true;
       $("app").hidden = false;
       $("logout").hidden = false;
       await loadData();
     } catch (e) {
-      showLogin();
-      if (e.status === 0) $("login-msg").textContent = e.error;
+      if (e.status === 401 || e.status === 403) return showLogin();
+      // 連不上後端(例如正在喚醒)時登入狀態還在,留在這一頁讓人重新整理。
+      $("status-msg").textContent = e.error;
+      $("status").hidden = false;
     }
   }
-
-  window.mffAdminGsiReady = function () {
-    if (!cfg.googleClientId) { $("login-msg").textContent = "還沒在 js/config.js 設定 googleClientId"; return; }
-    google.accounts.id.initialize({
-      client_id: cfg.googleClientId,
-      callback: async (resp) => {
-        $("login-msg").textContent = "確認中…（後端可能正在喚醒，最多約一分鐘）";
-        try {
-          const data = await api.call("POST", "/api/admin/login", { credential: resp.credential });
-          api.setToken(data.token);
-          $("login-msg").textContent = "";
-          start();
-        } catch (e) {
-          $("login-msg").textContent = e.status === 403 ? "這個帳號不是管理員" : e.error;
-        }
-      },
-    });
-    google.accounts.id.renderButton($("gsi"), { theme: "outline", size: "large", text: "signin_with" });
-  };
 
   $("logout").onclick = () => run(async () => {
     try { await api.call("POST", "/api/admin/logout"); } finally { api.setToken(null); showLogin(); }

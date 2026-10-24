@@ -16,11 +16,7 @@
     <button id="logout" hidden>登出</button>
   </header>
   <main>
-    <div id="login" class="card" hidden>
-      <p>請用管理員的 Google 帳號登入。</p>
-      <div id="gsi"></div>
-      <p id="login-msg" class="muted"></p>
-    </div>
+    <div id="status" class="card" hidden><p id="status-msg" class="muted"></p></div>
     <div id="app" hidden>
       <div class="tabs" id="tabs">
         <button data-tab="data" class="active">公用資料</button>
@@ -40,7 +36,5 @@
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/admin.js"></script>
-  <script src="https://accounts.google.com/gsi/client" async defer onload="window.mffAdminGsiReady && window.mffAdminGsiReady()"
-    onerror="document.getElementById('login-msg').textContent = '無法載入 Google 登入元件，請確認網路或關閉擋廣告的外掛後重新整理。'"></script>
 </body>
 </html>

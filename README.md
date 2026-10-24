@@ -40,7 +40,7 @@ mama-fufood/                     ← meta-repo,本機開發統一入口,本身�
 
 ### 前端的鎖只是方便,權限在後端
 
-首頁只有管理員登入後才顯示「管理後台」的入口,但這只是方便,不是安全措施:任何人都能直接打開 `admin.html`。真正的檢查在後端:`/api/admin/*` 的每一個請求都要帶管理員的 session,而且後端每次都會確認「這個 Email 現在還是不是管理員」;不是管理員的人打後台 API 一律被拒。後端的 CORS 也只允許這個網站的網址(與本機預覽的 `http://localhost:8003`)呼叫後台 API。
+首頁只有管理員登入後才顯示「管理後台」的入口,但這只是方便,不是安全措施:任何人都能直接打開 `admin.html`(沒有登入狀態時,這一頁會直接跳回首頁;登入只在首頁做,按「登出」也會回到首頁)。真正的檢查在後端:`/api/admin/*` 的每一個請求都要帶管理員的 session,而且後端每次都會確認「這個 Email 現在還是不是管理員」;不是管理員的人打後台 API 一律被拒。後端的 CORS 也只允許這個網站的網址(與本機預覽的 `http://localhost:8003`)呼叫後台 API。
 
 ### 登入:Google 的憑證只用一次
 
@@ -184,7 +184,7 @@ There is no frontend framework or build step — the `.html`, `.css` and `.js` f
 
 ### The Frontend Lock Is a Convenience; Permissions Live in the Backend
 
-The home page only shows the admin-console entry point after an admin signs in, but that's a convenience, not a security measure: anyone can open `admin.html` directly. The real check is in the backend: every `/api/admin/*` request must carry an admin session, and the backend re-checks "is this email still an admin right now" each time; anyone who isn't an admin is rejected by every admin API. The backend's CORS also only allows this site's origin (plus `http://localhost:8003` for local preview) to call the admin APIs.
+The home page only shows the admin-console entry point after an admin signs in, but that's a convenience, not a security measure: anyone can open `admin.html` directly (without a session the page sends you straight back to the home page; signing in happens only on the home page, and "Log out" also returns there). The real check is in the backend: every `/api/admin/*` request must carry an admin session, and the backend re-checks "is this email still an admin right now" each time; anyone who isn't an admin is rejected by every admin API. The backend's CORS also only allows this site's origin (plus `http://localhost:8003` for local preview) to call the admin APIs.
 
 ### Sign-In: The Google Credential Is Used Once
 
