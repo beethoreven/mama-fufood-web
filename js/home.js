@@ -26,7 +26,7 @@
   }
 
   async function onCredential(resp) {
-    $("login-note").textContent = "確認中…(後端可能正在喚醒,最多約一分鐘)";
+    $("login-note").textContent = "確認中…（後端可能正在喚醒，最多約一分鐘）";
     try {
       const data = await api.call("POST", "/api/admin/login", { credential: resp.credential });
       api.setToken(data.token);
@@ -34,7 +34,7 @@
       await showAdmin();
     } catch (e) {
       api.setToken(null);
-      $("login-note").textContent = e.status === 403 ? "已登入。這個帳號不是管理員,網站上沒有其他功能。" : e.error;
+      $("login-note").textContent = e.status === 403 ? "已登入。這個帳號不是管理員，網站上沒有其他功能。" : e.error;
     }
   }
 

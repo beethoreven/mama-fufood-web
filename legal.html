@@ -15,10 +15,10 @@
   <main>
     <article class="card legal" id="content"><p class="muted">載入中…</p></article>
   </main>
-  <footer>本 App 僅供記錄與參考,非基於醫學知識做的判斷。寶寶有任何反應,請諮詢醫師。</footer>
+  <footer>本 App 僅供記錄與參考，非基於醫學知識做的判斷。寶寶有任何反應，請諮詢醫師。</footer>
   <script src="js/md.js"></script>
   <script>
-    // 和 App 內建的是同一份內容(tools/sync_texts.py 同步)。
+    // 和 App 內建的是同一份內容（tools/sync_texts.py 同步）。
     (function () {
       const docs = { terms: "使用者條款", privacy: "隱私權政策", judgement_guide: "判斷邏輯說明" };
       const doc = new URLSearchParams(location.search).get("doc");
@@ -29,7 +29,7 @@
       fetch("legal/" + doc + ".md", { cache: "no-cache" })
         .then((r) => { if (!r.ok) throw new Error(); return r.text(); })
         .then((md) => { box.innerHTML = window.renderMarkdown(md); })
-        .catch(() => { box.innerHTML = "<p>載入失敗,請重新整理。</p>"; });
+        .catch(() => { box.innerHTML = "<p>載入失敗，請重新整理。</p>"; });
     })();
   </script>
 </body>

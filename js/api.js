@@ -25,7 +25,7 @@
         method, headers, body: body === undefined ? undefined : JSON.stringify(body), signal: ctrl.signal,
       });
     } catch (e) {
-      throw { status: 0, error: "連不上後端(可能正在喚醒,請等一下再試)" };
+      throw { status: 0, error: "連不上後端（可能正在喚醒，請等一下再試）" };
     } finally {
       clearTimeout(timer);
     }
@@ -34,7 +34,7 @@
     try { data = await resp.json(); } catch (e) { /* 不是 JSON */ }
     if (!resp.ok) {
       if (resp.status === 401) setToken(null);
-      throw { status: resp.status, code: data.code, error: data.error || `後端回應錯誤(${resp.status})` };
+      throw { status: resp.status, code: data.code, error: data.error || `後端回應錯誤（${resp.status}）` };
     }
     return data;
   }

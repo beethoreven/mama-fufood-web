@@ -5,6 +5,18 @@
   const api = window.mffApi;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  // 後台顯示的時間一律換成台北時間:2026-10-24 16:22 GMT+8。解析不了的原樣顯示。
+  const TIME_PARTS = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+  });
+  const fmtTime = (iso) => {
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (isNaN(d)) return String(iso);
+    const p = Object.fromEntries(TIME_PARTS.formatToParts(d).map((x) => [x.type, x.value]));
+    return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute} GMT+8`;
+  };
   let overview = null;
   let foodGroup = null;
   // 每次載入都拿一個序號;慢的舊回應回來時,序號已經不是最新的就丟掉,不蓋掉新的畫面
@@ -55,7 +67,7 @@
     google.accounts.id.initialize({
       client_id: cfg.googleClientId,
       callback: async (resp) => {
-        $("login-msg").textContent = "確認中…(後端可能正在喚醒,最多約一分鐘)";
+        $("login-msg").textContent = "確認中…（後端可能正在喚醒，最多約一分鐘）";
         try {
           const data = await api.call("POST", "/api/admin/login", { credential: resp.credential });
           api.setToken(data.token);
@@ -95,10 +107,9 @@
   function releaseLine(name, label) {
     const r = overview.releases[name];
     const dirty = r.has_changes ? '<span class="pill warn">草稿有未發布的修改</span>' : '<span class="pill">和發布版本一樣</span>';
-    return `<div class="row"><strong>${label}</strong><span class="muted">目前發布:${esc(r.version || "沒有")}</span>${dirty}
+    return `<div class="row release-line"><strong>${label}</strong><span class="muted">目前發布：${esc(r.version || "沒有")}</span>${dirty}
       <span class="grow"></span>
-      <button data-publish="${name}" class="primary" ${r.has_changes ? "" : "disabled"}>發布</button>
-      <button data-export="${name}">匯出目前清單</button></div>`;
+      <button data-publish="${name}" class="primary" ${r.has_changes ? "" : "disabled"}>發布</button></div>`;
   }
 
   function renderData() {
@@ -106,54 +117,54 @@
     const groups = d.groups;
     if (foodGroup === null && groups.length) foodGroup = groups[0].id;
     const cacheWarn = overview.cache_consistent ? "" :
-      '<div class="banner warn">快取版本和資料庫版本不一致,請到「系統」按「重新載入快取」。</div>';
+      '<div class="banner warn">快取版本和資料庫版本不一致，請到「系統」按「重新載入快取」。</div>';
     const fbWarn = overview.feedback_table_mb >= overview.feedback_table_limit_mb ?
-      `<div class="banner warn">意見回饋資料表已達 ${overview.feedback_table_mb} MB(上限 ${overview.feedback_table_limit_mb} MB),目前不收記錄檔。</div>` : "";
+      `<div class="banner warn">意見回饋資料表已達 ${overview.feedback_table_mb} MB（上限 ${overview.feedback_table_limit_mb} MB），目前不收記錄檔。</div>` : "";
     const groupRows = groups.map((g) => `<tr>
         <td>${g.id}</td>
-        <td><input data-g="${g.id}" data-f="name" value="${esc(g.name)}" size="6"></td>
-        <td><input data-g="${g.id}" data-f="emoji" value="${esc(g.emoji)}" size="2"></td>
-        <td><input data-g="${g.id}" data-f="sort" value="${g.sort}" size="3" inputmode="numeric"></td>
+        <td><input data-g="${g.id}" data-f="name" value="${esc(g.name)}" class="cell-name"></td>
+        <td><input data-g="${g.id}" data-f="emoji" value="${esc(g.emoji)}" class="field-emoji"></td>
+        <td><input data-g="${g.id}" data-f="sort" value="${g.sort}" class="cell-sort" inputmode="numeric"></td>
         <td><label><input type="checkbox" data-g="${g.id}" data-f="disabled" ${g.disabled ? "checked" : ""}> 停用</label></td>
         <td>${g.published ? '<span class="muted">已發布</span>' : `<button data-del-group="${g.id}" class="danger">刪除</button>`}</td>
       </tr>`).join("");
     const foods = d.foods.filter((f) => f.group_id === foodGroup);
     const foodRows = foods.map((f) => `<tr>
         <td>${f.id}</td>
-        <td><input data-food="${f.id}" data-f="name" value="${esc(f.name)}" size="4"></td>
-        <td><input data-food="${f.id}" data-f="emoji" value="${esc(f.emoji)}" size="2"></td>
-        <td><input data-food="${f.id}" data-f="sort" value="${f.sort}" size="3" inputmode="numeric"></td>
+        <td><input data-food="${f.id}" data-f="name" value="${esc(f.name)}" class="cell-name"></td>
+        <td><input data-food="${f.id}" data-f="emoji" value="${esc(f.emoji)}" class="field-emoji"></td>
+        <td><input data-food="${f.id}" data-f="sort" value="${f.sort}" class="cell-sort" inputmode="numeric"></td>
         <td><select data-food="${f.id}" data-f="group_id">${groups.map((g) => `<option value="${g.id}" ${g.id === f.group_id ? "selected" : ""}>${esc(g.emoji + " " + g.name)}</option>`).join("")}</select></td>
         <td><label><input type="checkbox" data-food="${f.id}" data-f="disabled" ${f.disabled ? "checked" : ""}> 停用</label></td>
         <td>${f.published ? '<span class="muted">已發布</span>' : `<button data-del-food="${f.id}" class="danger">刪除</button>`}</td>
       </tr>`).join("");
     const unitRows = d.units.map((u) => `<tr>
         <td>${u.id}</td>
-        <td><input data-unit="${u.id}" data-f="name" value="${esc(u.name)}" size="4"></td>
-        <td><input data-unit="${u.id}" data-f="sort" value="${u.sort}" size="3" inputmode="numeric"></td>
+        <td><input data-unit="${u.id}" data-f="name" value="${esc(u.name)}" class="cell-name"></td>
+        <td><input data-unit="${u.id}" data-f="sort" value="${u.sort}" class="cell-sort" inputmode="numeric"></td>
         <td><label><input type="radio" name="default-unit" data-unit="${u.id}" data-f="default" ${u.default ? "checked" : ""}> 預設</label></td>
         <td><label><input type="checkbox" data-unit="${u.id}" data-f="disabled" ${u.disabled ? "checked" : ""}> 停用</label></td>
         <td>${u.published ? '<span class="muted">已發布</span>' : `<button data-del-unit="${u.id}" class="danger">刪除</button>`}</td>
       </tr>`).join("");
     $("tab-data").innerHTML = `${cacheWarn}${fbWarn}
       <div class="card">
-        <p class="muted">修改會先存成草稿,按「發布」才會產生新版本、讓 App 下載。ID 永遠不可改、不可刪、不可重用:發布過的項目只能停用。
-        食材名稱 3 個字以內;圖示要剛好一個 emoji。</p>
+        <p class="muted">修改會先存成草稿，按「發布」才會產生新版本、讓 App 下載。ID 永遠不可改、不可刪、不可重用：發布過的項目只能停用。
+        食材名稱 3 個字以內；圖示要剛好一個 emoji。</p>
         ${releaseLine("food_list", "副食品清單")}
         ${releaseLine("units", "單位")}
       </div>
       <div class="card"><h3 style="margin-top:0">分組</h3>
         <div class="scroll-x"><table><thead><tr><th>ID</th><th>名稱</th><th>圖示</th><th>排序</th><th></th><th></th></tr></thead><tbody>${groupRows}</tbody></table></div>
-        <div class="row" style="margin-top:8px"><input id="new-group-name" placeholder="分組名稱" size="6"><input id="new-group-emoji" placeholder="🍚" size="2"><button id="add-group">新增分組</button></div>
+        <div class="row" style="margin-top:8px"><input id="new-group-name" class="field-name" placeholder="分組名稱"><input id="new-group-emoji" class="field-emoji" placeholder="🍚"><button id="add-group">新增分組</button></div>
       </div>
       <div class="card"><h3 style="margin-top:0">食材</h3>
-        <div class="row"><span class="muted">分組:</span><select id="food-group">${groups.map((g) => `<option value="${g.id}" ${g.id === foodGroup ? "selected" : ""}>${esc(g.emoji + " " + g.name)}</option>`).join("")}</select></div>
+        <div class="row"><span class="muted">分組：</span><select id="food-group">${groups.map((g) => `<option value="${g.id}" ${g.id === foodGroup ? "selected" : ""}>${esc(g.emoji + " " + g.name)}</option>`).join("")}</select></div>
         <div class="scroll-x"><table><thead><tr><th>ID</th><th>名稱</th><th>圖示</th><th>排序</th><th>分組</th><th></th><th></th></tr></thead><tbody>${foodRows}</tbody></table></div>
-        <div class="row" style="margin-top:8px"><input id="new-food-name" placeholder="食材(3 字內)" size="6"><input id="new-food-emoji" placeholder="🍎" size="2"><button id="add-food">新增到這個分組</button></div>
+        <div class="row" style="margin-top:8px"><input id="new-food-name" class="field-name" placeholder="食材（3 字內）"><input id="new-food-emoji" class="field-emoji" placeholder="🍎"><button id="add-food">新增到這個分組</button></div>
       </div>
       <div class="card"><h3 style="margin-top:0">單位</h3>
         <div class="scroll-x"><table><thead><tr><th>ID</th><th>名稱</th><th>排序</th><th></th><th></th><th></th></tr></thead><tbody>${unitRows}</tbody></table></div>
-        <div class="row" style="margin-top:8px"><input id="new-unit-name" placeholder="單位名稱" size="5"><button id="add-unit">新增單位</button></div>
+        <div class="row" style="margin-top:8px"><input id="new-unit-name" class="field-name" placeholder="單位名稱"><button id="add-unit">新增單位</button></div>
       </div>`;
     bindData();
   }
@@ -179,44 +190,33 @@
     box.querySelectorAll("[data-del-group],[data-del-food],[data-del-unit]").forEach((el) => {
       el.onclick = () => {
         const [kind, id] = el.dataset.delGroup ? ["groups", el.dataset.delGroup] : el.dataset.delFood ? ["foods", el.dataset.delFood] : ["units", el.dataset.delUnit];
-        if (!confirm("確定刪除這個還沒發布過的草稿嗎?")) return;
+        if (!confirm("確定刪除這個還沒發布過的草稿嗎？")) return;
         run(async () => { await api.call("DELETE", `/api/admin/${kind}/${id}`); await loadData(); }, "已刪除");
       };
     });
     box.querySelectorAll("[data-publish]").forEach((el) => {
       el.onclick = () => {
-        if (!confirm("發布之後,App 下次檢查時就會下載這個版本。確定發布?")) return;
+        if (!confirm("發布之後，App 下次檢查時就會下載這個版本。確定發布？")) return;
         run(async () => {
           const r = await api.call("POST", `/api/admin/publish/${el.dataset.publish}`);
           await loadData();
-          message(`已發布版本 ${r.version}${r.cache_reloaded ? "" : "(快取還沒更新,請到「系統」重新載入)"}`);
+          message(`已發布版本 ${r.version}${r.cache_reloaded ? "" : "（快取還沒更新，請到「系統」重新載入）"}`);
         });
       };
-    });
-    box.querySelectorAll("[data-export]").forEach((el) => {
-      el.onclick = () => run(async () => {
-        const resp = await api.call("GET", `/api/admin/export/${el.dataset.export}`, undefined, { raw: true });
-        const blob = await resp.blob();
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `${el.dataset.export}.json`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-      }, "已下載(放到 App 的 assets/datasets/ 當內建初始檔)");
     });
     $("food-group").onchange = (ev) => { foodGroup = parseInt(ev.target.value, 10); renderData(); };
     $("add-group").onclick = () => run(async () => {
       await api.call("POST", "/api/admin/groups", { name: $("new-group-name").value, emoji: $("new-group-emoji").value });
       await loadData();
-    }, "已新增分組(草稿)");
+    }, "已新增分組（草稿）");
     $("add-food").onclick = () => run(async () => {
       await api.call("POST", "/api/admin/foods", { group_id: foodGroup, name: $("new-food-name").value, emoji: $("new-food-emoji").value });
       await loadData();
-    }, "已新增食材(草稿)");
+    }, "已新增食材（草稿）");
     $("add-unit").onclick = () => run(async () => {
       await api.call("POST", "/api/admin/units", { name: $("new-unit-name").value });
       await loadData();
-    }, "已新增單位(草稿)");
+    }, "已新增單位（草稿）");
   }
 
   // ── App 版本 ────────────────────────────────────────────
@@ -224,16 +224,16 @@
     await run(async () => {
       const c = await api.call("GET", "/api/admin/app-config");
       $("tab-version").innerHTML = `<div class="card">
-        <p class="muted">強制更新只在重大問題、法律衝突或判斷規則修正時使用;只對有網路、而且有做每日檢查的手機生效。
+        <p class="muted">強制更新只在重大問題、法律衝突或判斷規則修正時使用；只對有網路、而且有做每日檢查的手機生效。
         畫面上會顯示這裡寫的原因。</p>
-        <p><label>最低可用 App 版本(x.y.z)<br><input id="cfg-min" value="${esc(c.min_app_version)}"></label></p>
+        <p><label>最低可用 App 版本（x.y.z）<br><input id="cfg-min" value="${esc(c.min_app_version)}"></label></p>
         <p><label>強制更新的原因<br><textarea id="cfg-reason" maxlength="300">${esc(c.force_reason)}</textarea></label></p>
-        <p><label>更新連結(https://,上架前可以留空)<br><input id="cfg-url" value="${esc(c.update_url)}" style="width:100%"></label></p>
+        <p><label>更新連結（https://，上架前可以留空）<br><input id="cfg-url" value="${esc(c.update_url)}" style="width:100%"></label></p>
         <p><label>「需要新版 App」的通知文字<br><input id="cfg-notice" value="${esc(c.dataset_notice)}" style="width:100%"></label></p>
-        <p class="muted">最後修改:${esc(c.updated_at)} ${esc(c.updated_by)}</p>
+        <p class="muted">最後修改：${esc(fmtTime(c.updated_at))} ${esc(c.updated_by)}</p>
         <button id="cfg-save" class="primary">儲存</button></div>`;
       $("cfg-save").onclick = () => {
-        if (!confirm("儲存後立即生效。確定?")) return;
+        if (!confirm("儲存後立即生效。確定？")) return;
         run(async () => {
           await api.call("PUT", "/api/admin/app-config", {
             min_app_version: $("cfg-min").value.trim(), force_reason: $("cfg-reason").value,
@@ -263,11 +263,11 @@
             <select id="f-status">${opt(Object.keys(STATUS), STATUS, feedbackFilters.status)}</select>
             <select id="f-ver">${opt(data.app_versions, null, feedbackFilters.app_version)}</select>
             <select id="f-model">${opt(data.device_models, null, feedbackFilters.device_model)}</select>
-            <span class="muted">共 ${data.total} 則(最長保留 90 天)</span>
+            <span class="muted">共 ${data.total} 則（最長保留 90 天）</span>
           </div>
           <div class="scroll-x"><table><thead><tr><th>時間</th><th>類型</th><th>狀態</th><th>描述</th><th>版本</th><th>機型</th></tr></thead><tbody>
           ${data.items.map((i) => `<tr data-fb="${i.id}" style="cursor:pointer">
-            <td>${esc(new Date(i.received_at).toLocaleString("zh-TW"))}</td><td>${esc(KIND[i.kind])}</td><td>${esc(STATUS[i.status])}</td>
+            <td>${esc(fmtTime(i.received_at))}</td><td>${esc(KIND[i.kind])}</td><td>${esc(STATUS[i.status])}</td>
             <td>${esc(i.description)}</td><td>${esc(i.app_version)}</td><td>${esc(i.device_model)}</td></tr>`).join("")}
           </tbody></table></div>
           <div class="row" style="margin-top:8px">
@@ -278,8 +278,8 @@
         </div>
         <div id="fb-detail"></div>
         <div class="card"><h3 style="margin-top:0">個資刪除請求</h3>
-          <p class="muted">刪掉某個 Email 的所有意見回饋(隱私權政策第七條)。</p>
-          <div class="row"><input id="del-email" placeholder="email@example.com" size="28"><button id="del-email-btn" class="danger">全部刪除</button></div>
+          <p class="muted">刪掉某個 Email 的所有意見回饋（隱私權政策第七條）。</p>
+          <div class="row"><input id="del-email" class="field-name" placeholder="email@example.com"><button id="del-email-btn" class="danger">全部刪除</button></div>
         </div>`;
       const set = (k) => (ev) => { feedbackFilters[k] = ev.target.value; feedbackFilters.page = 1; loadFeedback(); };
       $("f-kind").onchange = set("kind");
@@ -291,7 +291,7 @@
       document.querySelectorAll("[data-fb]").forEach((tr) => { tr.onclick = () => showFeedback(tr.dataset.fb); });
       $("del-email-btn").onclick = () => {
         const email = $("del-email").value.trim();
-        if (!email || !confirm(`確定刪除 ${email} 的所有意見回饋?無法復原。`)) return;
+        if (!email || !confirm(`確定刪除 ${email} 的所有意見回饋？無法復原。`)) return;
         run(async () => {
           const r = await api.call("POST", "/api/admin/feedback/delete-by-email", { email });
           message(`已刪除 ${r.deleted} 則`);
@@ -302,12 +302,12 @@
   }
 
   function renderLogs(logs) {
-    if (!logs) return '<p class="muted">沒有記錄檔(「提供建議」不附記錄檔)。</p>';
+    if (!logs) return '<p class="muted">沒有記錄檔（「提供建議」不附記錄檔）。</p>';
     const lines = (logs.logs || []).map((l) => {
       const { t, lv, c, ...rest } = l;
       return `${t} ${String(lv).toUpperCase().padEnd(5)} ${c} ${Object.keys(rest).length ? JSON.stringify(rest) : ""}`;
     });
-    return `<h4>記錄檔(${lines.length} 行)</h4><pre class="log">${esc(lines.join("\n"))}</pre>
+    return `<h4>記錄檔（${lines.length} 行）</h4><pre class="log">${esc(lines.join("\n"))}</pre>
       ${logs.exit_reasons && logs.exit_reasons.length ? `<h4>上次結束原因</h4><pre class="log">${esc(JSON.stringify(logs.exit_reasons, null, 1))}</pre>` : ""}
       ${logs.native_crash ? `<h4>原生層當機</h4><pre class="log">${esc(logs.native_crash)}</pre>` : ""}
       ${logs.logcat ? `<h4>logcat 摘錄</h4><pre class="log">${esc(logs.logcat)}</pre>` : ""}
@@ -323,7 +323,7 @@
         <div class="row"><strong>${esc(KIND[f.kind])}</strong><span class="muted">${esc(f.id)}</span><span class="grow"></span>
           <button id="fb-close">關閉</button></div>
         <p>${esc(f.description).replace(/\n/g, "<br>")}</p>
-        <p class="muted">Email:${esc(f.email)}|收到:${esc(new Date(f.received_at).toLocaleString("zh-TW"))}|手機時間:${esc(f.device_time)}<br>
+        <p class="muted">Email：${esc(f.email)}|收到：${esc(fmtTime(f.received_at))}|手機時間：${esc(fmtTime(f.device_time))}<br>
         App ${esc(f.app_version)}(${esc(f.build_number)})|${esc(f.device_model)}|${esc(f.os_version)}|安裝 ID ${esc(f.install_id)}</p>
         <div class="row">
           <select id="fb-status">${Object.keys(STATUS).map((s) => `<option value="${s}" ${s === f.status ? "selected" : ""}>${STATUS[s]}</option>`).join("")}</select>
@@ -340,7 +340,7 @@
         await loadFeedback();
       }, "已儲存");
       $("fb-delete").onclick = () => {
-        if (!confirm("確定刪除這則意見回饋?")) return;
+        if (!confirm("確定刪除這則意見回饋？")) return;
         run(async () => { await api.call("DELETE", "/api/admin/feedback/" + id); await loadFeedback(); }, "已刪除");
       };
       $("fb-detail").scrollIntoView({ behavior: "smooth" });
@@ -356,7 +356,7 @@
         ${data.admins.map((a) => `<tr><td>${esc(a.email)}</td><td>${esc(a.note)}</td>
           <td>${a.fixed ? '<span class="muted">環境變數設定</span>' : `<button data-rm="${esc(a.email)}" class="danger">移除</button>`}</td></tr>`).join("")}
         </tbody></table>
-        <div class="row" style="margin-top:8px"><input id="adm-email" placeholder="Email" size="26"><input id="adm-note" placeholder="備註" size="10"><button id="adm-add" class="primary">新增管理員</button></div>
+        <div class="row" style="margin-top:8px"><input id="adm-email" class="field-name" placeholder="Email"><input id="adm-note" class="field-name" placeholder="備註"><button id="adm-add" class="primary">新增管理員</button></div>
       </div>`;
       $("adm-add").onclick = () => run(async () => {
         await api.call("POST", "/api/admin/admins", { email: $("adm-email").value.trim(), note: $("adm-note").value.trim() });
@@ -364,7 +364,7 @@
       }, "已新增");
       document.querySelectorAll("[data-rm]").forEach((b) => {
         b.onclick = () => {
-          if (!confirm(`確定移除 ${b.dataset.rm}?`)) return;
+          if (!confirm(`確定移除 ${b.dataset.rm}？`)) return;
           run(async () => { await api.call("DELETE", "/api/admin/admins/" + encodeURIComponent(b.dataset.rm)); await loadAdmins(); }, "已移除");
         };
       });
@@ -379,14 +379,14 @@
       const cache = o.cache.loaded ? Object.entries(o.cache.datasets).map(([k, v]) => `${k}=${v}`).join("、") : "還沒載入";
       const db = Object.entries(o.releases).map(([k, v]) => `${k}=${v.version}`).join("、");
       $("tab-system").innerHTML = `<div class="card">
-        <p>快取版本:${esc(cache)}<br>資料庫版本:${esc(db)}<br>
+        <p>快取版本：${esc(cache)}<br>資料庫版本：${esc(db)}<br>
         ${o.cache_consistent ? '<span class="ok">一致</span>' : '<span class="warn">不一致</span>'}
-        <span class="muted">(快取載入時間 ${esc(o.cache.loaded_at || "-")})</span></p>
+        <span class="muted">（快取載入時間 ${esc(fmtTime(o.cache.loaded_at))}）</span></p>
         <button id="reload-cache">重新載入快取</button>
-        <p class="muted">萬一曾用 SQL 直接改了資料,按這個鈕或重啟後端即可。後端版本:${esc(o.commit || "本機")}</p>
+        <p class="muted">萬一曾用 SQL 直接改了資料，按這個鈕或重啟後端即可。後端版本：${esc(o.commit || "本機")}</p>
       </div>
-      <div class="card"><h3 style="margin-top:0">匯出格式定義(跟著後端程式發布,只能看)</h3>
-        ${f.formats.map((x) => `<details><summary>第 ${x.format_version} 版(${esc(x.status)},最低 App ${esc(x.min_app_version)})</summary>
+      <div class="card"><h3 style="margin-top:0">匯出格式定義（跟著後端程式發布，只能看）</h3>
+        ${f.formats.map((x) => `<details><summary>第 ${x.format_version} 版（${esc(x.status)}，最低 App ${esc(x.min_app_version)}）</summary>
           <pre class="log">${esc(JSON.stringify(x.definition, null, 1))}</pre></details>`).join("")}
       </div>`;
       $("reload-cache").onclick = () => run(async () => { await api.call("POST", "/api/admin/cache/reload"); await loadSystem(); }, "已重新載入");

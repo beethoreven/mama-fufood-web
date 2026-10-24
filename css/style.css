@@ -14,6 +14,7 @@
   --ok: #23805a;
   --warn: #956500;
   --danger: #bc4339;
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%234d5a6b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -24,6 +25,7 @@
     --border: #2e3846;
     --text: #eceff4;
     --text2: #aeb7c4;
+    --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23aeb7c4' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     --muted: #8e98a6;
     --accent: #8ec9f5;
     --on-accent: #0a2740;
@@ -95,13 +97,42 @@ input, select, textarea {
   min-height: 40px;
 }
 textarea { width: 100%; min-height: 80px; }
+/* 下拉選單:換成自己的箭頭,和右邊框留出距離(瀏覽器內建的箭頭貼著邊,也調不了位置)。 */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: var(--chevron);
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 8px;
+}
+/* 勾選框與單選鈕不套用一般輸入框的內距與高度,否則會被撐大、把旁邊的文字擠到下一行。 */
+input[type="checkbox"], input[type="radio"] {
+  min-height: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+/* 後台的表格每格都是輸入框或按鈕:文字、勾選框跟著輸入框垂直置中,勾選框和說明文字排在同一行。 */
+#app th, #app td { vertical-align: middle; }
+#app td label { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 th { font-weight: 500; color: var(--text2); font-size: 13px; }
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .tabs button.active { background: var(--accent-soft); border-color: var(--accent); }
 .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .grow { flex: 1; }
+/* 公用資料的兩行(副食品清單、單位)各有一組按鈕,行與行之間留開,按鈕才不會黏在一起。 */
+.release-line + .release-line { margin-top: 12px; }
+/* 表單列裡的文字欄位:撐滿剩下的寬度,窄螢幕時至少保留能看清楚內容的寬度(放不下就換行)。 */
+.field-name { flex: 1 1 12em; min-width: 10em; }
+.field-emoji { flex: 0 0 4.5em; width: 4.5em; text-align: center; }
+.cell-name { width: 100%; min-width: 7em; box-sizing: border-box; }
+.cell-sort { width: 5em; }
 .pill { display: inline-block; border-radius: 999px; padding: 0 10px; background: var(--surface2); font-size: 12px; }
 .banner { border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; background: var(--accent-soft); }
 .banner.warn { background: color-mix(in srgb, var(--warn) 18%, var(--surface)); color: var(--text); }
@@ -117,3 +148,6 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px
   main { padding: 12px; }
   .card { padding: 12px; }
 }
+
+/* .btn、button 等寫了 display 的元素,瀏覽器內建的 [hidden] 會被蓋掉,要明確壓回去。 */
+[hidden] { display: none !important; }
