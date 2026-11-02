@@ -14,6 +14,14 @@
     $("play").appendChild(a);
   }
 
+  if (cfg.apkVersion) {
+    const v = cfg.apkVersion;
+    const a = $("apk-link");
+    a.href = `https://github.com/beethoreven/mama-fufood-app/releases/download/v${v}/mama-fufood-${v}.apk`;
+    $("apk-version").textContent = `版本 ${v}`;
+    $("apk").hidden = false;
+  }
+
   // 介紹與三份文件用頁籤切換,不換頁。網址帶 ?doc=privacy 這類參數時直接打開那一份,
   // 切換頁籤時也更新網址,方便複製連結。legal.html 仍保留給 App 與 Google 同意畫面的連結用。
   const DOCS = { terms: "使用者條款", privacy: "隱私權政策", judgement_guide: "判斷邏輯說明" };

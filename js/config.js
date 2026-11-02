@@ -7,4 +7,7 @@ window.MFF_CONFIG = {
   googleClientId: "316171912832-3ujfsr17r549hpu000hpnb09as7u5u5c.apps.googleusercontent.com",
   // 上架後填 Google Play 的網址;空白時首頁顯示「目前尚未上架」。
   playUrl: "",
+  // 首頁「下載最新版」連到 GitHub Release 上的 APK。發新版時:在 mama-fufood-app 建立
+  // v<版本號> 的 Release、附上 mama-fufood-<版本號>.apk,再改這裡的版本號。
+  apkVersion: "1.1.0",
 };
