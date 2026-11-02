@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- 由 demo/tools/build.py 從正式版的 admin.html 產生，不要手改。 -->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <script>
+    // 示範版跟正式版同一個網域,localStorage 是共用的:這一頁所有的 key 加上前綴,
+    // 讀不到正式版的管理員 session,也不會寫進正式版的資料。一定要在其他 script 之前執行。
+    (function () {
+      var PREFIX = "demo:";
+      var S = Storage.prototype;
+      var getItem = S.getItem, setItem = S.setItem, removeItem = S.removeItem;
+      S.getItem = function (k) { return getItem.call(this, PREFIX + k); };
+      S.setItem = function (k, v) { return setItem.call(this, PREFIX + k, v); };
+      S.removeItem = function (k) { return removeItem.call(this, PREFIX + k); };
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>管理後台 - 媽媽記副食品</title>
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="top">
+    <a href="index.html"><img src="../favicon.png" alt="回首頁"></a>
+    <span class="title">管理後台</span>
+    <span id="who" class="muted"></span>
+    <button id="logout" hidden>登出</button>
+  </header>
+  <main>
+    <div id="status" class="card" hidden><p id="status-msg" class="muted"></p></div>
+    <div id="app" hidden>
+      <div class="tabs" id="tabs">
+        <button data-tab="data" class="active">公用資料</button>
+        <button data-tab="version">App 版本</button>
+        <button data-tab="feedback">意見回饋</button>
+        <button data-tab="admins">管理員</button>
+        <button data-tab="system">系統</button>
+      </div>
+      <div id="msg"></div>
+      <section id="tab-data"></section>
+      <section id="tab-version" hidden></section>
+      <section id="tab-feedback" hidden></section>
+      <section id="tab-admins" hidden></section>
+      <section id="tab-system" hidden></section>
+    </div>
+  </main>
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="fixtures.js"></script>
+  <script src="api.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>

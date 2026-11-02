@@ -29,6 +29,7 @@
     <span class="title">媽媽記副食品</span>
     <span id="account" class="muted"></span>
     <div id="gsi"></div>
+    <button id="demo-guest" type="button" hidden>不用 Google 帳號直接進入</button>
     <a id="admin-link" class="btn primary" href="admin.html" hidden>管理後台</a>
   </header>
   <main>
@@ -72,9 +73,22 @@
   </main>
   <footer>阿舍老師</footer>
   <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="fixtures.js"></script>
   <script src="api.js"></script>
   <script src="../js/md.js"></script>
   <script src="../js/home.js"></script>
+  <script>
+    // 示範版:不用 Google 帳號也能進後台。登入後(出現「管理後台」入口)就藏起來。
+    (function () {
+      var b = document.getElementById("demo-guest");
+      var admin = document.getElementById("admin-link");
+      function sync() { b.hidden = !!window.mffApi.token() && !admin.hidden; }
+      b.hidden = !!window.mffApi.token();
+      new MutationObserver(sync).observe(admin, { attributes: true });
+      b.onclick = function () { window.mffApi.setToken("demo"); location.reload(); };
+    })();
+  </script>
   <script src="https://accounts.google.com/gsi/client" async defer onload="window.mffHomeGsiReady && window.mffHomeGsiReady()"
     onerror="document.getElementById('login-note').textContent = '無法載入 Google 登入元件（不影響瀏覽網站）。'"></script>
 </body>

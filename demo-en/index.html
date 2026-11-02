@@ -30,6 +30,7 @@
     <span class="title">mama-fufood</span>
     <span id="account" class="muted"></span>
     <div id="gsi"></div>
+    <button id="demo-guest" type="button" hidden>Enter without a Google account</button>
     <a id="admin-link" class="btn primary" href="admin.html" hidden>Admin console</a>
   </header>
   <main>
@@ -73,10 +74,23 @@
   </main>
   <footer>阿舍老師</footer>
   <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="fixtures.js"></script>
   <script src="api.js"></script>
   <script src="../js/md.js"></script>
   <script src="home.js"></script>
+  <script>
+    // 示範版:不用 Google 帳號也能進後台。登入後(出現「管理後台」入口)就藏起來。
+    (function () {
+      var b = document.getElementById("demo-guest");
+      var admin = document.getElementById("admin-link");
+      function sync() { b.hidden = !!window.mffApi.token() && !admin.hidden; }
+      b.hidden = !!window.mffApi.token();
+      new MutationObserver(sync).observe(admin, { attributes: true });
+      b.onclick = function () { window.mffApi.setToken("demo"); location.reload(); };
+    })();
+  </script>
   <script src="https://accounts.google.com/gsi/client?hl=en" async defer onload="window.mffHomeGsiReady && window.mffHomeGsiReady()"
-    onerror="document.getElementById('login-note').textContent = 'Couldn't load Google Sign-In (the rest of the site still works).'"></script>
+    onerror="document.getElementById('login-note').textContent = 'Could not load Google Sign-In (the rest of the site still works).'"></script>
 </body>
 </html>
