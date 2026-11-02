@@ -1,0 +1,82 @@
+<!doctype html>
+<!-- 由 demo/tools/build.py 從正式版的 index.html 產生，不要手改。 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <script>
+    // 示範版跟正式版同一個網域,localStorage 是共用的:這一頁所有的 key 加上前綴,
+    // 讀不到正式版的管理員 session,也不會寫進正式版的資料。一定要在其他 script 之前執行。
+    (function () {
+      var PREFIX = "demo-en:";
+      var S = Storage.prototype;
+      var getItem = S.getItem, setItem = S.setItem, removeItem = S.removeItem;
+      S.getItem = function (k) { return getItem.call(this, PREFIX + k); };
+      S.setItem = function (k, v) { return setItem.call(this, PREFIX + k, v); };
+      S.removeItem = function (k) { return removeItem.call(this, PREFIX + k); };
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mama-fufood</title>
+  <meta name="description" content="An app for logging a baby's first foods: what they ate, how much, and whether there was an allergic reaction. Records stay on your phone and in your own Google Drive.">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>
+</head>
+<body>
+  <header class="top">
+    <img src="../favicon.png" alt="">
+    <span class="title">mama-fufood</span>
+    <span id="account" class="muted"></span>
+    <div id="gsi"></div>
+    <a id="admin-link" class="btn primary" href="admin.html" hidden>Admin console</a>
+  </header>
+  <main>
+    <nav class="tabs" id="tabs">
+      <button data-doc="" class="active">About</button>
+      <button data-doc="terms">Terms of Use</button>
+      <button data-doc="privacy">Privacy Policy</button>
+      <button data-doc="judgement_guide">How Results Are Determined</button>
+    </nav>
+    <article class="card legal" id="doc" hidden></article>
+    <div id="intro">
+      <div class="card">
+        <div class="row">
+          <img src="../icon_256.png" alt="App icon" width="96" height="96" style="border-radius: 22px">
+          <div class="grow">
+            <h1 style="margin: 0; font-size: 22px">mama-fufood</h1>
+            <p style="margin: 6px 0 0">Log your baby's first foods: what they ate each time, how much, whether there was an allergic reaction,
+              and whether they liked it, all organized into a calendar, statistics and simple results.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2 style="margin-top: 0; font-size: 17px">Your data stays with you</h2>
+        <ul>
+          <li>Your baby's name, records and photos are stored only on your phone, or in your own Google Drive when you turn on cloud features.</li>
+          <li>Export files are fully encrypted and can only be imported with the Google account that created them. We never have the key.</li>
+          <li>No ads and no analytics tools.</li>
+        </ul>
+        <p class="muted">The App is for record-keeping and reference only. Its results are not medical judgements. If your baby has any reaction, please consult a doctor.</p>
+      </div>
+      <div class="card">
+        <h2 style="margin-top: 0; font-size: 17px">Download</h2>
+        <p class="row" id="apk" hidden>
+          <a id="apk-link" class="btn primary" href="">Download the latest mama-fufood</a>
+          <span id="apk-version" class="muted"></span>
+        </p>
+        <p id="play">Not yet available on Google Play.</p>
+      </div>
+    </div>
+    <p id="login-note" class="muted"></p>
+  </main>
+  <footer>阿舍老師</footer>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="../js/md.js"></script>
+  <script src="home.js"></script>
+  <script src="https://accounts.google.com/gsi/client?hl=en" async defer onload="window.mffHomeGsiReady && window.mffHomeGsiReady()"
+    onerror="document.getElementById('login-note').textContent = 'Couldn't load Google Sign-In (the rest of the site still works).'"></script>
+</body>
+</html>
