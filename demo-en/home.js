@@ -1,6 +1,6 @@
 // 由 demo/tools/build.py 從 js/home.js 產生,不要手改。
-// 首頁:可以用 Google 登入。一般使用者登入沒有作用;管理員登入後才出現後台入口
-// (SPEC 第 13 節「網站」)。登入憑證會送到後端確認是不是管理員,用完即丟(隱私權政策第二條)。
+// 首頁:可以用 Google 登入。一般使用者登入沒有作用;管理員登入後才出現後台入口。
+// 登入憑證會送到後端確認是不是管理員,用完即丟(隱私權政策第二條)。
 (function () {
   const cfg = window.MFF_CONFIG;
   const api = window.mffApi;

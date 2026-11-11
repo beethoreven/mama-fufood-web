@@ -978,7 +978,7 @@ window.MFF_DEMO_CATALOG = {
    "definition": {
     "format_version": 0,
     "min_app_version": "0.1.0",
-    "description": "第 0 版匯出格式的 data.json(上架前的格式,App 0.x;規格見 EXPORT_FORMAT_DRAFT.md 第 5 節)。欄位全部必填。",
+    "description": "第 0 版匯出格式的 data.json(上架前的格式,App 0.x)。欄位全部必填。",
     "root": {
      "type": "object",
      "fields": {
@@ -1114,7 +1114,7 @@ window.MFF_DEMO_CATALOG = {
    "definition": {
     "format_version": 1,
     "min_app_version": "1.0.0",
-    "description": "第 1 版匯出格式的 data.json(App 1.x;規格見 EXPORT_FORMAT_DRAFT.md 第 5 節)。和第 0 版相比,紀錄多了 digestive(腹瀉或嘔吐)。欄位全部必填,digestive 可以是 null(沒填)。",
+    "description": "第 1 版匯出格式的 data.json(App 1.x)。和第 0 版相比,紀錄多了 digestive(腹瀉或嘔吐)。欄位全部必填,digestive 可以是 null(沒填)。",
     "root": {
      "type": "object",
      "fields": {

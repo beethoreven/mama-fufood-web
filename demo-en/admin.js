@@ -1,6 +1,6 @@
 // 由 demo/tools/build.py 從 js/admin.js 產生,不要手改。
-// 管理後台(SPEC 第 3 節「管理後台功能」)。
-// ★ 前端的鎖是化妝品:每一支後台 API 在後端都要求管理員的 session(auth_utils/access.py)。
+// 管理後台。
+// ★ 前端的鎖是化妝品:每一支後台 API 在後端都要求管理員的 session。
 (function () {
   const api = window.mffApi;
   const $ = (id) => document.getElementById(id);

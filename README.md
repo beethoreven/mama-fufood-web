@@ -9,7 +9,6 @@
 
 這兩部分刻意分開,不要交叉閱讀;報告是背景知識,SOP 是操作手冊。
 
-程式註解裡的「SPEC 第 N 節」、`design/DESIGN_SYSTEM.md`、`tools/sync_texts.py` 等,是只留在開發者本機的規格、設計文件與工具,不在 repo 裡。
 
 ---
 
@@ -156,7 +155,6 @@ The website (home page, terms of use, privacy policy, judgement-logic guide) and
 
 These two parts are deliberately kept separate — don't read them interleaved; the report is background knowledge, the guide is an operating manual.
 
-References in code comments such as "SPEC 第 N 節" (SPEC section N), `design/DESIGN_SYSTEM.md` and `tools/sync_texts.py` point to specs, design documents and tools that live only on the developer's machine; they are not in this repo.
 
 ## Project Report
 

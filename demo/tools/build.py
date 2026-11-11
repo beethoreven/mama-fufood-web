@@ -33,7 +33,7 @@ import translations  # noqa: E402
 WEB = Path(__file__).resolve().parents[2]
 CODEBASE = WEB.parent
 DATASETS = CODEBASE / "mama-fufood-app" / "assets" / "datasets"
-FORMATS = CODEBASE / "mama-fufood-backend" / "export_formats"
+FORMATS = CODEBASE / "router-backend" / "apps" / "mama_fufood" / "export_formats"
 DEMO = WEB / "demo"
 DEMO_EN = WEB / "demo-en"
 DOCS = ["terms", "privacy", "judgement_guide"]
