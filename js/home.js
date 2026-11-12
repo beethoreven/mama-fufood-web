@@ -1,8 +1,8 @@
 // 首頁:可以用 Google 登入。一般使用者登入沒有作用;管理員登入後才出現後台入口。
 // 登入憑證會送到後端確認是不是管理員,用完即丟(隱私權政策第二條)。
 (function () {
-  const cfg = window.MFF_CONFIG;
-  const api = window.mffApi;
+  const cfg = window.MAMA_FUFOOD_CONFIG;
+  const api = window.mamaFufoodApi;
   const $ = (id) => document.getElementById(id);
 
   if (cfg.playUrl) {
@@ -77,7 +77,7 @@
     }
   }
 
-  window.mffHomeGsiReady = function () {
+  window.mamaFufoodHomeGsiReady = function () {
     if (!cfg.googleClientId || !window.google) {
       $("login-note").textContent = "";
       return;

@@ -2,7 +2,7 @@
 // localStorage;不用 Google ID token 當長期憑證(它一小時就過期)。
 (function () {
   const KEY = "mff_admin_token";
-  const cfg = window.MFF_CONFIG;
+  const cfg = window.MAMA_FUFOOD_CONFIG;
 
   function token() {
     try { return localStorage.getItem(KEY); } catch (e) { return null; }
@@ -39,5 +39,5 @@
     return data;
   }
 
-  window.mffApi = { call, token, setToken };
+  window.mamaFufoodApi = { call, token, setToken };
 })();

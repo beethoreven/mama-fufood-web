@@ -51,10 +51,10 @@ GUEST = (
     "    (function () {\n"
     "      var b = document.getElementById(\"demo-guest\");\n"
     "      var admin = document.getElementById(\"admin-link\");\n"
-    "      function sync() { b.hidden = !!window.mffApi.token() && !admin.hidden; }\n"
-    "      b.hidden = !!window.mffApi.token();\n"
+    "      function sync() { b.hidden = !!window.mamaFufoodApi.token() && !admin.hidden; }\n"
+    "      b.hidden = !!window.mamaFufoodApi.token();\n"
     "      new MutationObserver(sync).observe(admin, { attributes: true });\n"
-    "      b.onclick = function () { window.mffApi.setToken(\"demo\"); location.reload(); };\n"
+    "      b.onclick = function () { window.mamaFufoodApi.setToken(\"demo\"); location.reload(); };\n"
     "    })();\n"
     "  </script>\n"
 )
@@ -176,7 +176,7 @@ def build_data(lang: str) -> str:
     published_at = f"{v[0:4]}-{v[4:6]}-{v[6:8]}T{v[8:10]}:{v[10:12]}:{v[12:14]}+00:00"
     data = {"food_list": food, "units": units, "formats": formats, "publishedAt": published_at}
     return (js_mark("App 的 assets/datasets/ 與後端的 export_formats/")
-            + "window.MFF_DEMO_CATALOG = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n")
+            + "window.MAMA_FUFOOD_DEMO_CATALOG = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n")
 
 
 def build_config() -> str:

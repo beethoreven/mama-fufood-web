@@ -1,5 +1,5 @@
 // 由 demo/tools/build.py 從 demo/api.js 產生,不要手改。
-// 示範版的 js/api.js:介面一樣(window.mffApi),但一個請求都不送出去。
+// 示範版的 js/api.js:介面一樣(window.mamaFufoodApi),但一個請求都不送出去。
 //
 // - 登入:Google 憑證只在瀏覽器裡解開、讀出 Email 拿來顯示,不送去任何地方;不管誰登入都是管理員,
 //   登入狀態存在這一頁自己的 localStorage(index.html 已替 key 加上前綴),重新整理後還在。
@@ -10,8 +10,8 @@
 (function () {
   const KEY = "mff_admin_token";
   const EMAIL_KEY = "mff_demo_email";
-  const catalog = window.MFF_DEMO_CATALOG || {};
-  const fx = window.MFF_DEMO_FIXTURES || { text: {} };
+  const catalog = window.MAMA_FUFOOD_DEMO_CATALOG || {};
+  const fx = window.MAMA_FUFOOD_DEMO_FIXTURES || { text: {} };
 
   function read(k) {
     try { return localStorage.getItem(k); } catch (e) { return null; }
@@ -119,5 +119,5 @@
     return readOnly();
   }
 
-  window.mffApi = { call, token, setToken };
+  window.mamaFufoodApi = { call, token, setToken };
 })();

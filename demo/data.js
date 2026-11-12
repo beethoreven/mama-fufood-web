@@ -1,5 +1,5 @@
 // 由 demo/tools/build.py 從 App 的 assets/datasets/ 與後端的 export_formats/ 產生,不要手改。
-window.MFF_DEMO_CATALOG = {
+window.MAMA_FUFOOD_DEMO_CATALOG = {
  "food_list": {
   "name": "food_list",
   "version": "20261023000000",

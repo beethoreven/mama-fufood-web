@@ -84,13 +84,13 @@
     (function () {
       var b = document.getElementById("demo-guest");
       var admin = document.getElementById("admin-link");
-      function sync() { b.hidden = !!window.mffApi.token() && !admin.hidden; }
-      b.hidden = !!window.mffApi.token();
+      function sync() { b.hidden = !!window.mamaFufoodApi.token() && !admin.hidden; }
+      b.hidden = !!window.mamaFufoodApi.token();
       new MutationObserver(sync).observe(admin, { attributes: true });
-      b.onclick = function () { window.mffApi.setToken("demo"); location.reload(); };
+      b.onclick = function () { window.mamaFufoodApi.setToken("demo"); location.reload(); };
     })();
   </script>
-  <script src="https://accounts.google.com/gsi/client?hl=en" async defer onload="window.mffHomeGsiReady && window.mffHomeGsiReady()"
+  <script src="https://accounts.google.com/gsi/client?hl=en" async defer onload="window.mamaFufoodHomeGsiReady && window.mamaFufoodHomeGsiReady()"
     onerror="document.getElementById('login-note').textContent = 'Could not load Google Sign-In (the rest of the site still works).'"></script>
 </body>
 </html>
