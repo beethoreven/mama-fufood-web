@@ -1,6 +1,6 @@
 // 示範版的假資料(中文):意見回饋、管理員、App 版本設定,以及假後端要顯示的文字。
 // Email 都是 example.com 的假地址,意見回饋的內容是虛構的。英文版在 demo-en/fixtures.js。
-window.MAMA_FUFOOD_DEMO_FIXTURES = {
+window.MFF_DEMO_FIXTURES = {
   text: {
     readOnly: "demo版本不會更新正式資料",
     notFound: "找不到這筆資料",

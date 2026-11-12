@@ -2,7 +2,7 @@
 // 管理後台。
 // ★ 前端的鎖是化妝品:每一支後台 API 在後端都要求管理員的 session。
 (function () {
-  const api = window.mamaFufoodApi;
+  const api = window.mffApi;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   // 後台顯示的時間一律換成台北時間:2026-10-24 16:22 GMT+8。解析不了的原樣顯示。
