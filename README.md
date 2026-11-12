@@ -137,7 +137,7 @@ GitHub 免費方案的 Pages 只能用在**公開**的 repo。
 
 | 欄位 | 必填? | 說明 |
 |---|---|---|
-| `apiBase` | **必填** | 後端網址(Render),例如 `https://mama-fufood-backend.onrender.com`,**結尾不要斜線**。 |
+| `apiBase` | **必填** | 後端網址(Render),例如 `https://router-backend-3hl2.onrender.com/mama-fufood`,**結尾不要斜線**。 |
 | `googleClientId` | **必填**(要用 Google 登入時) | Google Cloud「網頁應用程式」用戶端 ID(和後端的 `GOOGLE_CLIENT_ID` 是同一個)。空白時不顯示登入按鈕。 |
 | `playUrl` | 選填 | 上架後填 Google Play 的網址;空白時首頁顯示「目前尚未在 Google Play 上架」。 |
 | `apkVersion` | 選填 | 首頁「下載最新版媽媽記副食品」連到 `mama-fufood-app` 的 GitHub Release `v<版本號>` 上的 `mama-fufood-<版本號>.apk`,旁邊顯示版本號。發新版時先建立 Release,再改這裡;空白時不顯示。 |
@@ -281,7 +281,7 @@ None of these are secrets (the client ID appears in the web page anyway), but ev
 
 | Field | Required? | Description |
 |---|---|---|
-| `apiBase` | **Required** | The backend URL (Render), e.g. `https://mama-fufood-backend.onrender.com`, **no trailing slash**. |
+| `apiBase` | **Required** | The backend URL (Render), e.g. `https://router-backend-3hl2.onrender.com/mama-fufood`, **no trailing slash**. |
 | `googleClientId` | **Required** (for Google sign-in) | The Google Cloud "Web application" client ID (the same one as the backend's `GOOGLE_CLIENT_ID`). When empty, no sign-in button is shown. |
 | `playUrl` | Optional | The Google Play URL once listed; when empty, the home page says "目前尚未在 Google Play 上架" (not on Google Play yet). |
 | `apkVersion` | Optional | The home page's "下載最新版媽媽記副食品" (download the latest version) link points to `mama-fufood-<version>.apk` on the `mama-fufood-app` GitHub Release `v<version>`, with the version shown next to it. For a new version, create the Release first, then change this; when empty, the link is hidden. |
