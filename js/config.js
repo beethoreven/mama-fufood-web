@@ -9,5 +9,5 @@ window.MFF_CONFIG = {
   playUrl: "",
   // 首頁「下載最新版」連到 GitHub Release 上的 APK。發新版時:在 mama-fufood-app 建立
   // v<版本號> 的 Release、附上 mama-fufood-<版本號>.apk,再改這裡的版本號。
-  apkVersion: "1.2.0",
+  apkVersion: "2.0.0",
 };
