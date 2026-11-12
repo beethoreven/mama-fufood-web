@@ -277,6 +277,6 @@ UNIT_NAMES = {"克": "g", "毫升": "ml", "口": "bite", "小匙": "tsp", "大�
 # 匯出格式定義裡的說明(後端 export_formats/v*.json 的 description)。
 FORMAT_DESCRIPTIONS = {
     0: "data.json of export format version 0 (the pre-release format, App 0.x). All fields are required.",
-    1: "data.json of export format version 1 (App 1.x). Compared with version 0, each record adds digestive "
+    1: "data.json of export format version 1 (App 1.0.0 and later). Compared with version 0, each record adds digestive "
        "(diarrhea or vomiting). All fields are required; digestive may be null (not filled in).",
 }

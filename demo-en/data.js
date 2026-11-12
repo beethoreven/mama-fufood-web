@@ -1114,7 +1114,7 @@ window.MFF_DEMO_CATALOG = {
    "definition": {
     "format_version": 1,
     "min_app_version": "1.0.0",
-    "description": "data.json of export format version 1 (App 1.x). Compared with version 0, each record adds digestive (diarrhea or vomiting). All fields are required; digestive may be null (not filled in).",
+    "description": "data.json of export format version 1 (App 1.0.0 and later). Compared with version 0, each record adds digestive (diarrhea or vomiting). All fields are required; digestive may be null (not filled in).",
     "root": {
      "type": "object",
      "fields": {
